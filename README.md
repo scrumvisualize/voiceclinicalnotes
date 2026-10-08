@@ -31,7 +31,7 @@ The application also displays the actual clinical information extracted from the
 
 ---
 
-![Clinical Documentation AI](assets/ClinAI.png)
+![Clinical Documentation AI](src/assets/ClinAI.png)
 
 ## AI / OpenAI Models
 
