@@ -65,6 +65,10 @@ It returns structured information such as:
 }
 ```
 
+### Clinical History
+
+![Clinical Documentation AI](src/assets/history.png)
+
 ### High-Level Flow
 
 ```text
