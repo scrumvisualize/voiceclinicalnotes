@@ -27,6 +27,35 @@ export default function Evaluation({ evaluation }: Props) {
     }
   ];
 
+  const threshold = 80;
+
+  const hasResults =
+    evaluation.accuracy !== null &&
+    evaluation.precision !== null &&
+    evaluation.recall !== null &&
+    evaluation.testCases > 0;
+
+  const passed =
+    hasResults &&
+    evaluation.accuracy! >= threshold &&
+    evaluation.precision! >= threshold &&
+    evaluation.recall! >= threshold;
+
+  const status = !hasResults
+    ? {
+        label: 'Evaluation Unavailable',
+        classes: 'bg-slate-100 text-slate-600'
+      }
+    : passed
+      ? {
+          label: 'Evaluation Passed',
+          classes: 'bg-emerald-50 text-emerald-700'
+        }
+      : {
+          label: 'Needs Improvement',
+          classes: 'bg-amber-50 text-amber-700'
+        };
+
   return (
     <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
@@ -44,8 +73,10 @@ export default function Evaluation({ evaluation }: Props) {
           </p>
         </div>
 
-        <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700">
-          Evaluation Passed
+        <span
+          className={`rounded-full px-3 py-1 text-xs font-semibold ${status.classes}`}
+        >
+          {status.label}
         </span>
       </div>
 
@@ -63,6 +94,13 @@ export default function Evaluation({ evaluation }: Props) {
           </div>
         ))}
       </div>
+
+      {hasResults && (
+        <p className="mt-4 text-xs text-slate-500">
+          Passing criteria: Accuracy, Precision and Recall must each be at least{' '}
+          {threshold}%.
+        </p>
+      )}
     </section>
   );
 }

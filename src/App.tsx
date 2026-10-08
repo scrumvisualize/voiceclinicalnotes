@@ -9,6 +9,9 @@ import Evaluation from './components/Evaluation';
 
 import { clinicalNote } from './data/mockData';
 import type { Finding } from './types/clinical';
+import ClinicalHistory, {
+  type ClinicalHistoryItem
+} from './components/ClinicalHistory';
 
 function App() {
   const [note, setNote] = useState(clinicalNote);
@@ -25,9 +28,11 @@ function App() {
     recall: null,
     testCases: 0
   });
+  const [history, setHistory] = useState<ClinicalHistoryItem[]>([]);
 
   useEffect(() => {
     loadEvaluation();
+    loadHistory();
   }, []);
 
   const loadEvaluation = async () => {
@@ -62,6 +67,61 @@ function App() {
     } catch (error) {
       console.error('Unable to evaluate model:', error);
     }
+  };
+
+  const loadHistory = () => {
+    try {
+      const storedHistory = localStorage.getItem('clinicalNoteHistory');
+
+      if (!storedHistory) {
+        return;
+      }
+
+      const parsedHistory: ClinicalHistoryItem[] = JSON.parse(storedHistory);
+
+      setHistory(parsedHistory);
+    } catch (error) {
+      console.error('Unable to load clinical note history:', error);
+    }
+  };
+  const saveToHistory = (noteText: string, findings: Finding[]) => {
+    const newItem: ClinicalHistoryItem = {
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+      note: noteText,
+      findings,
+      score: calculateScore(findings)
+    };
+
+    const updatedHistory = [newItem, ...history].slice(0, 5);
+
+    setHistory(updatedHistory);
+
+    localStorage.setItem('clinicalNoteHistory', JSON.stringify(updatedHistory));
+  };
+
+  const calculateScore = (findings: Finding[]) => {
+    if (findings.length === 0) {
+      return 0;
+    }
+
+    const total = findings.reduce((sum, finding) => {
+      switch (finding.status) {
+        case 'PASS':
+          return sum + 100;
+
+        case 'REVIEW':
+          return sum + 50;
+
+        case 'FAIL':
+          return sum;
+
+        default:
+          return sum;
+      }
+    }, 0);
+
+    return Math.round(total / findings.length);
   };
 
   const handleTranscriptChange = async (transcript: string) => {
@@ -137,6 +197,9 @@ function App() {
       console.log('AI analysis response:', data);
 
       setAnalysisFindings(data.findings);
+
+      saveToHistory(note.note, data.findings);
+
       // Real evaluation returned by backend
       if (data.evaluation) {
         setEvaluation(data.evaluation);
@@ -146,6 +209,34 @@ function App() {
     } finally {
       setAnalyzing(false);
     }
+  };
+
+  const handleViewHistory = (item: ClinicalHistoryItem) => {
+    setNote((current) => ({
+      ...current,
+      note: item.note
+    }));
+
+    setAnalysisFindings(item.findings);
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleDeleteHistory = (id: string) => {
+    const updatedHistory = history.filter((item) => item.id !== id);
+
+    setHistory(updatedHistory);
+
+    localStorage.setItem('clinicalNoteHistory', JSON.stringify(updatedHistory));
+  };
+
+  const handleClearHistory = () => {
+    setHistory([]);
+
+    localStorage.removeItem('clinicalNoteHistory');
   };
 
   return (
@@ -178,6 +269,16 @@ function App() {
         {/* AI Analysis */}
         <div className="mb-6">
           <AIAnalysis findings={analysisFindings} />
+        </div>
+
+        {/* Clinical History */}
+        <div className="mb-6">
+          <ClinicalHistory
+            history={history}
+            onView={handleViewHistory}
+            onDelete={handleDeleteHistory}
+            onClearAll={handleClearHistory}
+          />
         </div>
 
         {/* Requirements */}
