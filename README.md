@@ -1,75 +1,104 @@
-# React + TypeScript + Vite
+# Clinical Documentation AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An AI-powered clinical documentation analysis application built with **React, TypeScript, Vite, Node.js, and OpenAI models**.
 
-Currently, two official plugins are available:
+The application allows users to capture or enter clinical notes, extract clinical information, and use AI to evaluate whether important documentation requirements are present.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The project also includes an evaluation workflow using labelled test cases to calculate **Accuracy, Precision, and Recall** for the clinical-note analysis model.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Overview
 
-## Expanding the ESLint configuration
+The application is designed to help identify whether a clinical note contains the information required for documentation quality.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+The AI evaluates the following six requirements:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+1. **Diagnosis documented**
+2. **Symptoms documented**
+3. **Medical necessity**
+4. **Treatment documented**
+5. **Treatment duration**
+6. **Patient progress**
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Each requirement is classified as:
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+- **PASS** – Information is clearly and explicitly documented.
+- **REVIEW** – Information is partially documented or ambiguous.
+- **FAIL** – Information is not documented.
 
+The application also displays the actual clinical information extracted from the note, along with an explanation and confidence score.
+
+---
+
+![Clinical Documentation AI](src/assets/ClinAI.png)
+
+## AI / OpenAI Models
+
+The project uses OpenAI models for different purposes.
+
+### Voice Experiments
+
+**GPT-Realtime-2.1 Mini**
+
+Used for experimenting with real-time voice interaction and voice-based clinical note capture.
+
+The purpose is to allow spoken clinical information to be converted into a usable transcript for further analysis.
+
+### Clinical Note Analysis
+
+**GPT-6 Sol**
+
+Used for clinical documentation analysis.
+
+GPT-6 Sol processes the clinical note and determines whether each documentation requirement is present.
+
+It returns structured information such as:
+
+```json
+{
+  "requirement": "Symptoms documented",
+  "status": "PASS",
+  "value": "Fall with bruised hand",
+  "confidence": 0.96,
+  "explanation": "The patient explicitly reports falling and bruising their hand."
+}
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+### Clinical History
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+![Clinical Documentation AI](src/assets/history.png)
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### High-Level Flow
 
+```text
+Voice Input
+     │
+     ▼
+GPT-Realtime-2.1 Mini
+     │
+     ▼
+Clinical Transcript
+     │
+     ▼
+React Clinical Note UI
+     │
+     ▼
+Node.js / Express API
+     │
+     ▼
+GPT-6 Sol
+     │
+     ▼
+Clinical Documentation Analysis
+     │
+     ├── Diagnosis
+     ├── Symptoms / Signs
+     ├── Medical Necessity
+     ├── Treatment
+     ├── Treatment Duration
+     └── Patient Progress
+     │
+     ▼
+AI Analysis Results
 ```
