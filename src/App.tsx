@@ -12,6 +12,7 @@ import type { Finding } from './types/clinical';
 import ClinicalHistory, {
   type ClinicalHistoryItem
 } from './components/ClinicalHistory';
+import AudioUpload from './components/AudioUpload';
 
 function App() {
   const [note, setNote] = useState(clinicalNote);
@@ -249,6 +250,14 @@ function App() {
           <VoiceCapture onTranscriptChange={handleTranscriptChange} />
 
           <ClinicalNote note={note} />
+          <AudioUpload
+            onTranscript={(transcript) =>
+              setNote((previous) => ({
+                ...previous,
+                note: transcript
+              }))
+            }
+          />
         </div>
 
         {/* Analyze Button */}

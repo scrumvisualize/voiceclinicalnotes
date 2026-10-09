@@ -2,6 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
+import multer from 'multer';
+import { toFile } from 'openai/uploads';
 import evaluationCases from '../data/evaluationCases';
 
 dotenv.config();
@@ -450,6 +452,35 @@ If no condition is identifiable, return an empty string.
 
     res.status(500).json({
       error: 'Unable to extract clinical information.'
+    });
+  }
+});
+
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 10 * 1024 * 1024 }
+});
+
+//Upload an audio file to transcribe.
+app.post('/api/transcribe-audio', upload.single('audio'), async (req, res) => {
+  console.log('✅ /api/transcribe-audio route reached');
+  try {
+    if (!req.file) {
+      return res.status(400).json({
+        error: 'Please upload an audio file.'
+      });
+    }
+
+    const transcription = await openai.audio.transcriptions.create({
+      file: await toFile(req.file.buffer, req.file.originalname),
+      model: 'gpt-4o-mini-transcribe'
+    });
+
+    res.json({ transcript: transcription.text });
+  } catch (error) {
+    console.error('Audio transcription failed:', error);
+    res.status(500).json({
+      error: 'Unable to transcribe audio.'
     });
   }
 });
