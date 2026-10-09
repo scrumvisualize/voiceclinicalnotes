@@ -65,9 +65,15 @@ It returns structured information such as:
 }
 ```
 
+### Audio File Upload
+
+Now support uploading a sample audio file and transcribe into text.
+
+![Audio Transcribe AI](src/assets/audio.png)
+
 ### Clinical History
 
-![Clinical Documentation AI](src/assets/history.png)
+![Clinical History AI](src/assets/history.png)
 
 ### High-Level Flow
 
