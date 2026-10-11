@@ -67,8 +67,10 @@ export default function AudioUpload({ onTranscript }: Props) {
   };
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4">
-      <label className="mb-2 block font-semibold">Upload Sample Audio</label>
+    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-colors duration-200 dark:border-slate-700 dark:bg-slate-800">
+      <label className="mb-2 block font-semibold text-slate-900 dark:text-slate-100">
+        Upload Sample Audio
+      </label>
 
       <input
         type="file"
@@ -79,33 +81,41 @@ export default function AudioUpload({ onTranscript }: Props) {
           setSuccess('');
         }}
         disabled={loading}
-        className="block w-full text-sm"
+        className="block w-full text-sm text-slate-700 file:mr-4 file:rounded-lg file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:font-semibold file:text-blue-700 hover:file:bg-blue-100 disabled:cursor-not-allowed disabled:opacity-50 dark:text-slate-300 dark:file:bg-slate-700 dark:file:text-blue-300 dark:hover:file:bg-slate-600"
       />
 
       {file && (
-        <p className="mt-2 text-sm text-slate-600">Selected: {file.name}</p>
+        <p className="mt-2 break-all text-sm text-slate-600 dark:text-slate-300">
+          Selected: {file.name}
+        </p>
       )}
 
       <button
         type="button"
         onClick={handleUpload}
         disabled={loading || !file}
-        className="mt-3 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+        className="mt-3 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
         {loading ? 'Transcribing...' : 'Upload & Transcribe'}
       </button>
 
       {loading && (
-        <p className="mt-2 text-sm text-slate-600">Transcribing audio...</p>
+        <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+          Transcribing audio...
+        </p>
       )}
 
       {error && (
-        <p role="alert" className="mt-2 text-sm text-red-600">
+        <p role="alert" className="mt-2 text-sm text-red-600 dark:text-red-400">
           {error}
         </p>
       )}
 
-      {success && <p className="mt-2 text-sm text-green-600">{success}</p>}
+      {success && (
+        <p className="mt-2 text-sm text-green-600 dark:text-green-400">
+          {success}
+        </p>
+      )}
     </div>
   );
 }

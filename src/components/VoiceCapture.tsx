@@ -383,29 +383,29 @@ export default function VoiceCapture({ onTranscriptChange }: Props) {
   };
 
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-colors duration-200 dark:border-slate-700 dark:bg-slate-800">
       <div className="mb-5 flex items-start justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
             Voice Capture
           </p>
 
-          <h2 className="mt-1 text-lg font-semibold text-slate-900">
+          <h2 className="mt-1 text-lg font-semibold text-slate-900 dark:text-slate-100">
             GPT-Realtime-2.1 Mini
           </h2>
 
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Capture the clinician&apos;s spoken note.
           </p>
         </div>
 
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-lg">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-100 text-lg dark:bg-slate-700">
           🎙
         </div>
       </div>
 
-      <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-5 text-center">
-        <p className="text-sm text-slate-500">
+      <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50 p-5 text-center transition-colors dark:border-slate-600 dark:bg-slate-900">
+        <p className="text-sm text-slate-500 dark:text-slate-400">
           {connecting
             ? 'Connecting to voice session...'
             : active
@@ -421,7 +421,7 @@ export default function VoiceCapture({ onTranscriptChange }: Props) {
               ? 'bg-red-500 hover:bg-red-600'
               : connecting
                 ? 'cursor-not-allowed bg-slate-400'
-                : 'bg-slate-900 hover:bg-slate-800'
+                : 'bg-slate-900 hover:bg-slate-800 dark:bg-blue-600 dark:hover:bg-blue-500'
           }`}
         >
           {connecting
