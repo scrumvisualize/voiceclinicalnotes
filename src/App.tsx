@@ -271,7 +271,7 @@ function App() {
         <div className="mb-6 grid gap-6 lg:grid-cols-2">
           <VoiceCapture onTranscriptChange={handleTranscriptChange} />
 
-          <ClinicalNote note={note} />
+          <ClinicalNote note={note} onNoteChange={setNote} />
           <AudioUpload
             onTranscript={(transcript) =>
               setNote((previous) => ({
