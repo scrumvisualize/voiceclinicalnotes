@@ -31,6 +31,28 @@ function App() {
   });
   const [history, setHistory] = useState<ClinicalHistoryItem[]>([]);
 
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    try {
+      return localStorage.getItem('clinai-theme') === 'dark' ? 'dark' : 'light';
+    } catch {
+      return 'light';
+    }
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', theme === 'dark');
+
+    try {
+      localStorage.setItem('clinai-theme', theme);
+    } catch {
+      // The application still works if storage is unavailable.
+    }
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme((current) => (current === 'light' ? 'dark' : 'light'));
+  };
+
   useEffect(() => {
     loadEvaluation();
     loadHistory();
@@ -241,8 +263,8 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <Header />
+    <div className="min-h-screen bg-slate-50 text-slate-900 transition-colors duration-200 dark:bg-slate-900 dark:text-slate-100">
+      <Header theme={theme} onToggleTheme={toggleTheme} />
 
       <main className="mx-auto max-w-7xl px-6 py-8">
         {/* Voice + Clinical Note */}

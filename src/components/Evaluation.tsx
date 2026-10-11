@@ -57,18 +57,18 @@ export default function Evaluation({ evaluation }: Props) {
         };
 
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-colors duration-200 dark:border-slate-700 dark:bg-slate-800">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 dark:text-slate-500">
             AI Evaluation
           </p>
 
-          <h2 className="mt-1 text-lg font-semibold text-slate-900">
+          <h2 className="mt-1 text-lg font-semibold text-slate-900 dark:text-slate-100">
             Model Quality
           </h2>
 
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
             Evaluation against synthetic ground-truth cases.
           </p>
         </div>
@@ -84,11 +84,13 @@ export default function Evaluation({ evaluation }: Props) {
         {metrics.map((metric) => (
           <div
             key={metric.label}
-            className="rounded-lg border border-slate-200 bg-slate-50 p-4"
+            className="rounded-lg border border-slate-200 bg-slate-50 p-4 transition-colors dark:border-slate-700 dark:bg-slate-900"
           >
-            <p className="text-xs text-slate-400">{metric.label}</p>
+            <p className="text-xs text-slate-400 dark:text-slate-500">
+              {metric.label}
+            </p>
 
-            <p className="mt-1 text-xl font-semibold text-slate-900">
+            <p className="mt-1 text-xl font-semibold text-slate-900 dark:text-slate-100">
               {metric.value}
             </p>
           </div>
@@ -96,7 +98,7 @@ export default function Evaluation({ evaluation }: Props) {
       </div>
 
       {hasResults && (
-        <p className="mt-4 text-xs text-slate-500">
+        <p className="mt-4 text-xs text-slate-500 dark:text-slate-400">
           Passing criteria: Accuracy, Precision and Recall must each be at least{' '}
           {threshold}%.
         </p>
