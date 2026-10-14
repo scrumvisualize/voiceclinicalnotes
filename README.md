@@ -75,6 +75,12 @@ Now support uploading a sample audio file and transcribe into text.
 
 ![Clinical History AI](src/assets/history.png)
 
+### Model Evaluation
+
+Successfully performed the evaluation and displays results in graph.
+
+![Evaluation AI](src/assets/eval.png)
+
 ### High-Level Flow
 
 ```text

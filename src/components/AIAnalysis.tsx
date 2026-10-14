@@ -7,7 +7,7 @@ interface Props {
 function getStatusClasses(status: Finding['status']) {
   switch (status) {
     case 'PASS':
-      return 'bg-emerald-50 text-emerald-700 border-emerald-200';
+      return 'bg-emerald-200 text-emerald-700 border-emerald-200';
 
     case 'REVIEW':
       return 'bg-amber-50 text-amber-700 border-amber-200';
