@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { Finding } from '../types/clinical';
 
 export interface ClinicalHistoryItem {
@@ -52,6 +53,23 @@ export default function ClinicalHistory({
   onDelete,
   onClearAll
 }: Props) {
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [copyError, setCopyError] = useState('');
+
+  const handleCopy = async (item: ClinicalHistoryItem) => {
+    try {
+      await navigator.clipboard.writeText(item.note);
+      setCopiedId(item.id);
+      setCopyError('');
+
+      window.setTimeout(() => {
+        setCopiedId(null);
+      }, 2000);
+    } catch {
+      setCopyError('Unable to copy note. Please try again.');
+    }
+  };
+
   return (
     <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-colors duration-200 dark:border-slate-700 dark:bg-slate-800">
       <div className="mb-5 flex items-start justify-between">
@@ -127,6 +145,17 @@ export default function ClinicalHistory({
                       className="rounded-md border border-slate-200 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-100 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
                     >
                       View
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => handleCopy(item)}
+                      className="rounded-lg border border-slate-200 px-3 py-1.5
+                      text-sm font-medium text-slate-600 hover:bg-slate-50
+                      dark:border-slate-600 dark:text-slate-300
+                      dark:hover:bg-slate-700"
+                    >
+                      {copiedId === item.id ? 'Copied!' : 'Copy'}
                     </button>
 
                     <button
